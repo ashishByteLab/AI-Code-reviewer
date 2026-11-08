@@ -1,0 +1,16 @@
+# Render.com Blueprint — Auto-deploy configuration
+services:
+  - type: web
+    name: codesentinel-ai
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.18
+      - key: GEMINI_API_KEY
+        value: ""
+      - key: OPENAI_API_KEY
+        value: ""
