@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSentinel AI - Seminar-Powered Bug Detection & Code Optimizer</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="/static/css/bootstrap-icons.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg border-bottom border-secondary-subtle px-4 py-3 sticky-top" style="background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(12px);">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <span class="fs-4 text-info"><i class="bi bi-shield-shaded"></i></span>
+                <span class="fw-bold fs-5 tracking-wide gradient-text">CodeSentinel AI</span>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-2">v2.0</span>
+            </a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span id="dockerStatusBadge" class="badge bg-secondary">Checking Sandbox...</span>
+                <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                    <i class="bi bi-gear-fill me-1"></i> AI Settings
+                </button>
+                <button class="btn btn-primary btn-sm px-3" onclick="document.getElementById('sourceInputSection').scrollIntoView({behavior: 'smooth'})">
+                    <i class="bi bi-cloud-arrow-up-fill me-1"></i> New Analysis
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container py-4">
+
+        <!-- Seminar Paper Citations Banner -->
+        <div class="glass-card p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h5 class="fw-bold mb-0 text-light"><i class="bi bi-mortarboard-fill text-warning me-2"></i>Academic Seminar Foundations</h5>
+                <span class="badge bg-dark border text-muted">Integrated Base Papers</span>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.06) !important;">
+                        <span class="paper-badge mb-2"><i class="bi bi-cpu-fill"></i> IEEE Software 2025</span>
+                        <h6 class="fw-bold mb-1">Quantum Software Testing</h6>
+                        <p class="small text-muted mb-0">Transform-based detection, reversibility assertions, and property-based test oracles.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.06) !important;">
+                        <span class="paper-badge mb-2" style="color: #4ade80; border-color: rgba(74,222,128,0.3);"><i class="bi bi-cloud-lightning-fill"></i> IEEE Access 2024</span>
+                        <h6 class="fw-bold mb-1">Serverless Testing & Costs</h6>
+                        <p class="small text-muted mb-0">Cold-start optimization, shift-left testing ratio (Unit vs E2E), and loop iteration cost analysis.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded h-100" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.06) !important;">
+                        <span class="paper-badge mb-2" style="color: #38bdf8; border-color: rgba(56,189,248,0.3);"><i class="bi bi-sliders"></i> IEEE TSE 2022</span>
+                        <h6 class="fw-bold mb-1">COMER: Metamorphic Testing</h6>
+                        <p class="small text-muted mb-0">Couples t-way interaction coverage with metamorphic groups to solve the automated test oracle problem.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Section: Upload, Editor, Demos -->
+        <div id="sourceInputSection" class="glass-card p-4 mb-4">
+            <ul class="nav nav-pills mb-3" id="inputTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="zip-tab" data-bs-toggle="pill" data-bs-target="#tab-zip" type="button" role="tab">
+                        <i class="bi bi-file-earmark-zip-fill me-1"></i> Upload Source ZIP
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="editor-tab" data-bs-toggle="pill" data-bs-target="#tab-editor" type="button" role="tab">
+                        <i class="bi bi-code-slash me-1"></i> Direct Code Editor
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="demos-tab" data-bs-toggle="pill" data-bs-target="#tab-demos" type="button" role="tab">
+                        <i class="bi bi-collection-play-fill me-1"></i> Seminar Demo Benchmarks
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="inputTabsContent">
+                <!-- Tab 1: ZIP Upload -->
+                <div class="tab-pane fade show active" id="tab-zip" role="tabpanel">
+                    <div class="upload-dropzone" id="dropzone">
+                        <i class="bi bi-cloud-arrow-up text-info display-4 mb-2"></i>
+                        <h5 class="fw-bold text-light">Drag & Drop Your Source Code ZIP Archive Here</h5>
+                        <p class="text-muted small">Supports multi-file projects, Python modules, and package trees (Max 50MB)</p>
+                        <button class="btn btn-outline-info btn-sm px-4 mt-2">
+                            <i class="bi bi-folder2-open me-1"></i> Browse Files
+                        </button>
+                        <input type="file" id="zipFileInput" accept=".zip,.py" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Tab 2: Direct Code Editor -->
+                <div class="tab-pane fade" id="tab-editor" role="tabpanel">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Paste or type Python code to check for bugs, unnecessary iterations & vulnerabilities:</label>
+                        <textarea class="form-control code-container" id="directCodeInput" rows="12" style="font-size: 0.9rem;" placeholder="def process_transactions(records):
+    # Paste your code here...
+    duplicates = []
+    for r in records:
+        for c in records:
+            if r == c:
+                duplicates.append(r)
+    return duplicates"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary px-4" id="directScanBtn">
+                            <i class="bi bi-play-circle-fill me-1"></i> Analyze Code Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Seminar Demo Benchmarks -->
+                <div class="tab-pane fade" id="tab-demos" role="tabpanel">
+                    <p class="text-muted small mb-3">One-click load official seminar demonstration packages to verify all features:</p>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="glass-card p-3 h-100 text-center">
+                                <i class="bi bi-cloud-check text-success fs-1 mb-2"></i>
+                                <h6 class="fw-bold">Serverless AWS Lambda Demo</h6>
+                                <p class="small text-muted mb-3">Cold-start imports, connection overhead, and O(N*M) nested loop iteration.</p>
+                                <button class="btn btn-outline-success btn-sm w-100" onclick="loadDemo('serverless_app')">
+                                    <i class="bi bi-play-fill me-1"></i> Run Serverless Demo
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card p-3 h-100 text-center">
+                                <i class="bi bi-diagram-3 text-info fs-1 mb-2"></i>
+                                <h6 class="fw-bold">COMER Metamorphic Demo</h6>
+                                <p class="small text-muted mb-3">Quadratic duplicate search, exponential recursion, and permutation invariance test.</p>
+                                <button class="btn btn-outline-info btn-sm w-100" onclick="loadDemo('math_algorithms')">
+                                    <i class="bi bi-play-fill me-1"></i> Run COMER Demo
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card p-3 h-100 text-center">
+                                <i class="bi bi-shield-lock text-danger fs-1 mb-2"></i>
+                                <h6 class="fw-bold">Quantum & Security Demo</h6>
+                                <p class="small text-muted mb-3">Transform reversibility breakdown, phase loss, and SQL injection security vulnerability.</p>
+                                <button class="btn btn-outline-danger btn-sm w-100" onclick="loadDemo('quantum_algo')">
+                                    <i class="bi bi-play-fill me-1"></i> Run Security/Quantum Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Results Dashboard (Initially Hidden) -->
+        <div id="resultsDashboard" style="display: none;">
+            
+            <!-- Health Score & Metric Cards Row -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="glass-card p-3 text-center h-100">
+                        <span class="text-muted small text-uppercase fw-bold">Code Health Score</span>
+                        <div class="score-circle my-2" id="scoreCircle">
+                            <span id="scoreValue">85</span>
+                        </div>
+                        <span class="small text-muted">Out of 100</span>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row g-3 h-100">
+                        <div class="col-md-3">
+                            <div class="glass-card p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small text-uppercase fw-bold">Bugs & Logic</span>
+                                    <i class="bi bi-bug-fill text-danger fs-4"></i>
+                                </div>
+                                <h2 class="fw-bold text-danger my-2" id="statBugs">0</h2>
+                                <span class="small text-muted">Logic & Invariant flaws</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small text-uppercase fw-bold">Unnecessary Iterations</span>
+                                    <i class="bi bi-arrow-repeat text-warning fs-4"></i>
+                                </div>
+                                <h2 class="fw-bold text-warning my-2" id="statIterations">0</h2>
+                                <span class="small text-muted">Redundant loop cycles</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small text-uppercase fw-bold">Security Vulns</span>
+                                    <i class="bi bi-shield-x text-info fs-4"></i>
+                                </div>
+                                <h2 class="fw-bold text-info my-2" id="statSecurity">0</h2>
+                                <span class="small text-muted">Bandit & Semgrep checks</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="glass-card p-3 h-100">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted small text-uppercase fw-bold">Cost Reduction</span>
+                                    <i class="bi bi-graph-down-arrow text-success fs-4"></i>
+                                </div>
+                                <h2 class="fw-bold text-success my-2" id="statCostSavings">0%</h2>
+                                <span class="small text-muted">Est. compute savings</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Serverless Testing Ratio Card (IEEE Access 2024) -->
+            <div class="glass-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                    <h6 class="fw-bold mb-0">
+                        <i class="bi bi-bar-chart-steps text-info me-2"></i>
+                        Recommended Shift-Left Testing Ratio (De Silva & Hewawasam, IEEE Access 2024)
+                    </h6>
+                    <span class="badge bg-secondary">Test Pyramid Strategy</span>
+                </div>
+                <p class="small text-muted mb-3">
+                    In serverless and distributed architectures, over-reliance on End-to-End cloud tests creates high cloud bills and slow pipelines. Focus heavily on isolated Unit tests with mocked service boundaries.
+                </p>
+                <div class="progress" style="height: 28px; font-weight: 600; font-size: 0.85rem;">
+                    <div id="testRatioUnit" class="progress-bar bg-success" role="progressbar" style="width: 75%;">Unit: 75%</div>
+                    <div id="testRatioIntegration" class="progress-bar bg-info text-dark" role="progressbar" style="width: 20%;">Integration: 20%</div>
+                    <div id="testRatioE2E" class="progress-bar bg-warning text-dark" role="progressbar" style="width: 5%;">E2E: 5%</div>
+                </div>
+            </div>
+
+            <!-- Executive AI Summary Card -->
+            <div class="glass-card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold text-light mb-0"><i class="bi bi-robot text-primary me-2"></i>AI Agent Audit & Executive Summary</h5>
+                    <button class="btn btn-sm btn-outline-light" onclick="downloadReport()">
+                        <i class="bi bi-download me-1"></i> Export Report (MD)
+                    </button>
+                </div>
+                <p class="text-light lead fs-6 mb-0" id="executiveSummaryText">Analyzing findings...</p>
+            </div>
+
+            <!-- Main Tabbed Deep Dive Section -->
+            <div class="glass-card p-4 mb-4">
+                <ul class="nav nav-pills mb-4" id="analysisTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="issues-tab" data-bs-toggle="pill" data-bs-target="#tab-issues" type="button">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i> Bugs & Warnings
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="alternatives-tab" data-bs-toggle="pill" data-bs-target="#tab-alternatives" type="button">
+                            <i class="bi bi-lightning-charge-fill me-1"></i> Efficient Alternatives & Diffs
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="comer-tab" data-bs-toggle="pill" data-bs-target="#tab-comer" type="button">
+                            <i class="bi bi-sliders me-1"></i> COMER Metamorphic Testing
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="sandboxTabBtn" data-bs-toggle="pill" data-bs-target="#tab-sandbox" type="button">
+                            <i class="bi bi-terminal-fill me-1"></i> Live Sandbox Execution
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="swe-tab" data-bs-toggle="pill" data-bs-target="#tab-swe" type="button">
+                            <i class="bi bi-clipboard-check-fill me-1"></i> SWE-bench Lite Evaluator
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="memory-tab" data-bs-toggle="pill" data-bs-target="#tab-memory" type="button">
+                            <i class="bi bi-brain me-1"></i> ChromaDB Experience Memory
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Tab 1: Issues -->
+                    <div class="tab-pane fade show active" id="tab-issues">
+                        <div class="d-flex gap-2 mb-3 flex-wrap">
+                            <button class="btn btn-sm btn-outline-secondary issue-filter-btn active" onclick="filterIssues('ALL')">All Issues</button>
+                            <button class="btn btn-sm btn-outline-danger issue-filter-btn" onclick="filterIssues('BUG')">Bugs & Invariants</button>
+                            <button class="btn btn-sm btn-outline-warning issue-filter-btn" onclick="filterIssues('ITERATION')">Unnecessary Iterations</button>
+                            <button class="btn btn-sm btn-outline-info issue-filter-btn" onclick="filterIssues('SECURITY')">Security (Bandit/Semgrep)</button>
+                            <button class="btn btn-sm btn-outline-secondary issue-filter-btn" onclick="filterIssues('WARNING')">Architectural Warnings</button>
+                        </div>
+                        <div id="issuesContainer"></div>
+                    </div>
+
+                    <!-- Tab 2: Alternatives & Diffs -->
+                    <div class="tab-pane fade" id="tab-alternatives">
+                        <div id="optimizationsContainer"></div>
+                    </div>
+
+                    <!-- Tab 3: COMER Metamorphic Verification -->
+                    <div class="tab-pane fade" id="tab-comer">
+                        <h6 class="fw-bold mb-2 text-info">
+                            <i class="bi bi-info-circle me-1"></i> Automated Test Oracle Verification (Niu et al., IEEE TSE 2022)
+                        </h6>
+                        <p class="small text-muted mb-3">
+                            Verifies relation invariants $r_{out}(f(t_{src}), f(t_{follow}))$ across Metamorphic Groups without human test oracles.
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Function & Test Case</th>
+                                        <th>Relation Type</th>
+                                        <th>Metamorphic Group Inputs</th>
+                                        <th>Observed Outputs</th>
+                                        <th>Oracle Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="metamorphicTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: Sandbox Runner -->
+                    <div class="tab-pane fade" id="tab-sandbox">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold mb-0 text-light"><i class="bi bi-box-seam me-2"></i>Docker / Subprocess Code Sandbox</h6>
+                            <button class="btn btn-success btn-sm px-3" id="runSandboxBtn" onclick="runSandboxCode()">
+                                <i class="bi bi-play-fill me-1"></i> Execute Code
+                            </button>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="small text-muted">Python Code to Run:</label>
+                                <textarea class="form-control code-container" id="sandboxCodeInput" rows="12"></textarea>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="small text-muted">Execution Console Output:</label>
+                                <pre class="code-container" id="sandboxOutputConsole" style="min-height: 290px; color: #58a6ff;">Ready to execute. Click 'Execute Code'.</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 5: SWE-bench Lite Evaluator -->
+                    <div class="tab-pane fade" id="tab-swe">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-light"><i class="bi bi-award-fill text-warning me-2"></i>SWE-bench Lite Task Regression Benchmarking</h6>
+                            <p class="small text-muted">Evaluates whether your optimized alternative patch passes regression test suites.</p>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small text-muted">Select Benchmark Task:</label>
+                                <select class="form-select bg-dark text-light border-secondary" id="sweTaskSelect"></select>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button class="btn btn-primary btn-sm px-4" onclick="runSweEvaluation()">
+                                    <i class="bi bi-check2-square me-1"></i> Evaluate Candidate Patch
+                                </button>
+                            </div>
+                        </div>
+                        <div class="alert alert-secondary small" id="sweTaskDesc">Loading task...</div>
+                        <div class="mb-3">
+                            <label class="small text-muted">Candidate Patch Implementation:</label>
+                            <textarea class="form-control code-container" id="swePatchCodeInput" rows="8" placeholder="def find_duplicates(list_a, list_b):
+    lookup = set(list_b)
+    return [x for x in list_a if x in lookup]"></textarea>
+                        </div>
+                        <div id="sweEvalResult"></div>
+                    </div>
+
+                    <!-- Tab 6: ChromaDB Memory -->
+                    <div class="tab-pane fade" id="tab-memory">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-info mb-2"><i class="bi bi-search me-1"></i>Retrieved Past Experiences (Similarity Matched)</h6>
+                                <div id="experienceMemoryContainer"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-light mb-2"><i class="bi bi-plus-circle me-1"></i>Add New Optimization Experience</h6>
+                                <div class="glass-card p-3">
+                                    <div class="mb-2">
+                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" id="expTitle" placeholder="Title (e.g. Vectorized Loop)">
+                                    </div>
+                                    <div class="mb-2">
+                                        <select class="form-select form-select-sm bg-dark text-light border-secondary" id="expCategory">
+                                            <option value="ITERATION_OPTIMIZATION">Iteration Optimization</option>
+                                            <option value="SERVERLESS_HOTSPOT">Serverless Hotspot</option>
+                                            <option value="SECURITY">Security CWE</option>
+                                            <option value="METAMORPHIC_INVARIANT">Metamorphic Invariant</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <textarea class="form-control form-control-sm code-container" id="expBug" rows="2" placeholder="Buggy pattern snippet..."></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <textarea class="form-control form-control-sm code-container" id="expFix" rows="2" placeholder="Optimized fix snippet..."></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <input type="text" class="form-control form-control-sm bg-dark text-light border-secondary" id="expExplanation" placeholder="Why this optimizes cost / fixes error...">
+                                    </div>
+                                    <button class="btn btn-outline-info btn-sm w-100" onclick="submitNewExperience()">
+                                        <i class="bi bi-save me-1"></i> Save to ChromaDB Memory
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-secondary my-4">
+                        <h6 class="fw-bold text-muted mb-3">All Persistent Learned Experiences in Memory:</h6>
+                        <div id="allExperiencesList"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light border border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title"><i class="bi bi-sliders me-2"></i>AI Model & API Key Settings</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">
+                        CodeSentinel AI operates with a built-in semantic analysis engine offline. You can optionally supply your Google Gemini or OpenAI API keys for external frontier model synthesis.
+                    </p>
+                    <div class="mb-3">
+                        <label class="form-label small">Google Gemini API Key:</label>
+                        <input type="password" class="form-control bg-dark text-light border-secondary" id="geminiKeyInput" placeholder="AIzaSy...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">OpenAI API Key:</label>
+                        <input type="password" class="form-control bg-dark text-light border-secondary" id="openaiKeyInput" placeholder="sk-...">
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="saveSettingsBtn">Save Keys</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(8px); z-index: 9999; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="spinner-border text-info mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+        <h5 class="fw-bold text-light" id="loadingMessage">Analyzing Codebase...</h5>
+        <p class="small text-muted">Running Bandit, Semgrep, COMER Metamorphic Engine, and AST Loop Profiler</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-dark text-light border-secondary">
+                <i class="bi bi-bell-fill text-info me-2"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastBody">Action completed.</div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <!-- Application JS -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

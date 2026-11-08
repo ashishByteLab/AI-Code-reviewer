@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  codesentinel:
+    build: .
+    container_name: codesentinel_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - SANDBOX_TIMEOUT_SECONDS=10
+    restart: unless-stopped
